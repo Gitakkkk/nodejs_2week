@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Bulma CSS 링크 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!--웹폰트-->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@800&display=swap" rel="stylesheet">
+    <!--js-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+
+    <style>
+        .detail-box {
+            margin: auto;
+            width: 800px;
+            padding: 20px;
+        }
+    </style>
+
+
+    <button class="button is-info has-text-white is-focus" id="btn_edit" onclick="location.href='/edit/<%=list._id%>'">수정 /
+        삭제</button>
+</head>
+
+<body>
+    <div class="detail-box">
+        <p>
+            <%=list.title%>
+                <%=list.name%>
+                    <%=(list.date).slice(0,10)%>
+                        <%=list.contents%>
+        </p>
+    </div>
+</body>
+
+</html>

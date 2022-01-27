@@ -1,0 +1,77 @@
+<html>
+
+<head>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1">제목</span>
+    <input type="text" id='title' class="form-control" placeholder="<%=list.title%>" aria-label="Username"
+        aria-describedby="basic-addon1">
+</div>
+<div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1">작성자명</span>
+    <input type="text" id='name' class="form-control" placeholder="<%=list.name%>" aria-label="Username"
+        aria-describedby="basic-addon1">
+</div>
+<div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1">비밀번호</span>
+    <input type="text" id='passWord' class="form-control" placeholder="" aria-label="Username"
+        aria-describedby="basic-addon1">
+</div>
+<div class="input-group mb-3">
+    <span class="input-group-text" id="basic-addon1">내용</span>
+    <input type="text" id='contents' class="form-control" placeholder="<%=list.contents%>" aria-label="Username"
+        aria-describedby="basic-addon1">
+</div>
+
+<button class="button is-info has-text-white is-focus" id="btn_modify" onclick="Modify()">수정</button>
+<button class="button is-info has-text-white is-focus" id="btn_delete" onclick="Delete()">삭제</button>
+
+<script>
+    function Delete() {
+        $.ajax({
+                type: "POST",
+                async: true,
+                url: "/edit/<%=list._id%>/delete",
+                data: {
+                    passWord: $("#passWord").val()
+                },
+                dataType: "JSON",
+                success: function (data) {
+                    if (data["message"] === "비밀번호가 다릅니다.") {
+                        alert(data["message"])
+                    } else {
+                    alert(data["message"])
+                    window.location.replace('/')
+                }
+            }
+            })
+    }
+
+    function Modify() {
+        const date = new Date().toISOString();
+        $.ajax({
+                type: "POST",
+                async: true,
+                url: "/edit/<%=list._id%>/modify",
+                data: {
+                    title: $("#title").val(),
+                    name: $("#name").val(),
+                    passWord: $("#passWord").val(),
+                    contents: $("#contents").val(),
+                    date: date,
+                },
+                dataType: "JSON",
+                success: function (data) {
+                    if (data["message"] === "비밀번호가 다릅니다.") {
+                        alert(data["message"])
+                    } else {
+                    alert(data["message"])
+                    window.location.replace('/')
+                }
+            }
+            })
+    }
+</script>
+</html>

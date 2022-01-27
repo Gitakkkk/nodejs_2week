@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Bulma CSS 링크 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!--웹폰트-->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@800&display=swap" rel="stylesheet">
+    <!--js-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+
+    <title>나만의 블로그</title>
+    <style>
+        * {
+            font-family: 'GmarketSansMedium';
+        }
+
+        @font-face {
+            font-family: 'GmarketSansBold';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .media {
+            margin: auto;
+            width: 800px;
+            padding: 20px;
+        }
+        .posting-box {
+            margin: auto;
+            width: 800px;
+            padding: 20px;
+        }
+    </style>
+    <script>
+        function show_contens() {
+            $.ajax({
+                type: 'GET',
+                url: '/api/posting',
+                data: {},
+                dataType: 'JSON',
+                async: true,
+                success: function (response) {
+                    const posts = response['list']
+                    for (let i = 0; i < posts.length; i++) {
+                        const id = posts[i]['_id']
+                        const title = posts[i]['title']
+                        const name = posts[i]['name']
+                        const date = posts[i]['date'].slice(0, 10)
+                        const temp_html = `<div id="contents-box">
+                                                <p>
+                                                    <a class="nav-link active" onclick="location.href='/detail/${id}'">${title}</a>
+                                                    ${name}
+                                                    ${date}
+                                                </p>
+                                            </div>`
+                        $('#contents-box').append(temp_html)
+                        }                              
+                    }
+                }
+            )                                             
+        }
+
+        $(document).ready(function () {
+            show_contens();
+        })
+    </script>
+</head>
+
+<body>
+    <section class="hero is-medium" style="background-color: steelblue; height: 300px">
+        <div class="hero-body">
+            <p class="title" style="font-family: GmarketSansBold; color: white">
+                나만의 블로그
+            </p>
+        </div>
+    </section>
+    <article class="media">
+        <div class="level-item">
+            <a class="button is-info has-text-white is-focus" onclick="location.href='/write'"
+                style="background-color: steelblue">글쓰기</a>
+        </div>
+    </article>
+    <div id="contents-box" class="posting-box">
+    </div>
+</body>
+
+</html>
