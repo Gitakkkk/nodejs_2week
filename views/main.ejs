@@ -22,6 +22,13 @@
 
     </style>
     <script>
+
+        function logout() {
+            localStorage.removeItem("token")
+            alert("로그아웃이 완료되었습니다.")
+            window.location.reload()
+        }
+
         function show_contens() {
             $.ajax({
                 type: 'GET',
@@ -57,6 +64,7 @@
 <body>
     <button onclick="location.href='/write'">글쓰기</button>
     <button onclick="location.href='/login'">로그인</button>
+    <button onclick="logout()">로그아웃</button>
     <table class="table table-striped">
         <thead>
             <tr>

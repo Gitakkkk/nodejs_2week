@@ -6,7 +6,7 @@ const User = require("../schemas/user")
 const authmiddlewares = require("../middlewares/auth-middleware")
 
 const myblog = require("../schemas/blogSchema");
-const user = require('../schemas/user');
+const commenting = require("../schemas/comment");
 
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
@@ -23,12 +23,10 @@ router.get("/posting", async (req, res) => {
 })
 
 router.post("/comment", async (req, res) => {
-    console.log('router go')
     const { comment } = req.body;
 
-    let createdData = await comment.create({ comment });
+    let createdData = await commenting.create({ comment });
     res.json({ createdData });
-    console.log('router complete')
 })
 
 try {
@@ -55,6 +53,13 @@ try {
         if (existUsers) {
             res.status(400).send({
                 errorMessage: "닉네임 또는 패스워드를 확인해주세요"
+            });
+            return;
+        }
+
+        if  (/^([A-Za-z0-9]{3,})$/.test(nickname) === false || password.length < 3) {
+            res.status(400).send({
+                errorMessage: "데이터 형식이 옳지 않습니다"
             });
             return;
         }
