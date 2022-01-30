@@ -34,12 +34,8 @@
 <button class="button is-info has-text-white is-focus" id="btn_wirte">글쓰기</button>
 
 <script>
-    $('#btn_wirte').click(function () {
+    try {$('#btn_wirte').click(function () {
         const date = new Date().toISOString();
-        if ($("#title").val() || $("#name").val() || $("#passWord").val() || $("#contents").val() === '') {
-            alert("모든 칸을 채워주세요!")
-        }
-        return;
         $.ajax({
             type: 'POST',
             async: true,
@@ -58,6 +54,9 @@
             }
         })
     })
+} catch (error) {
+    alert("작성내용을 확인해주세요")
+}
 </script>
 
 </html>

@@ -13,7 +13,6 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-// 프론트엔드에서 참조하는 값 : virtual
 UserSchema.virtual("userId").get(function () {
   return this._id.toHexString();
 });

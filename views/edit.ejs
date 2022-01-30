@@ -55,12 +55,9 @@
         })
     }
 
-    function Modify() {
+    try{
+        function Modify() {
         const date = new Date().toISOString();
-        if ($("#title").val() || $("#name").val() || $("#passWord").val() || $("#contents").val() === '') {
-            alert("모든 칸을 채워주세요!")
-        }
-        return;
         $.ajax({
             type: "POST",
             async: true,
@@ -83,6 +80,9 @@
             }
         })
     }
+} catch {
+    alert("모든 칸을 채워주세요!")
+}
 </script>
 
 </html>
