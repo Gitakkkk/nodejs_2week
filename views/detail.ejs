@@ -14,9 +14,11 @@
   <button id="btn_edit" onclick="location.href='/edit/<%=list._id%>'">수정 / 삭제</button>
 
   <script>
+      
     function btn_comment() {
       const comment = $('#inputcomment').val();
-      const id = 
+      const queryString = window.location['href'];
+      const posting_url = (queryString.toString().split('/'))[4];
 
       if (!localStorage.getItem("token")) {
         alert("로그인이 필요한 기능입니다!")
@@ -28,8 +30,7 @@
         async: true,
         url: "/api/comment",
         data: {
-          id: 
-          nickname: 
+          posting_url: posting_url,
           comment: comment,
         },
         dataType: "JSON",

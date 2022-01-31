@@ -11,10 +11,13 @@ const commenting = require("../schemas/comment");
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
 
-router.post("/posting", async (req, res) => {
-    const { title, name, passWord, contents, date } = req.body;
-    let createdData = await myblog.create({ title, name, passWord, contents, date });
-    res.json({ createdData });
+router.post("/posting", authmiddlewares ,async (req, res) => {
+    console.log("router")
+    const { title, contents, date } = req.body;
+    const {user} = req.locals;
+    await myblog.create({ title, name: user.nickname, contents, date});
+    console.log(title, contents, date)
+    res.send({});
 })
 
 router.get("/posting", async (req, res) => {
@@ -23,10 +26,10 @@ router.get("/posting", async (req, res) => {
 })
 
 router.post("/comment", async (req, res) => {
-    const { comment } = req.body;
+    const { comment, posting_url } = req.body;
 
-    let createdData = await commenting.create({ comment });
-    res.json({ createdData });
+    await commenting.create({ comment, posting_url });
+    res.send({});
 })
 
 try {
@@ -87,7 +90,7 @@ router.post("/auth", async (req, res) => {
         })
         return;
     }
-    
+
     const token = jwt.sign({ userId: user.userId }, "secret-key")
 
     res.send({

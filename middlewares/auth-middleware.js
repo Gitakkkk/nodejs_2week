@@ -3,8 +3,10 @@ const User = require("../schemas/user")
 
 module.exports = (req, res, next) => {
     const {authorization} = req.headers;
+    console.log(req.headers.authorization)
     const {tokenType, tokenValue} = authorization.split(' ');
     
+
     if (tokenType !== 'Bearer') {
         res.status(400).send({
             errorMessage: "로그인 후 사용하세요."
