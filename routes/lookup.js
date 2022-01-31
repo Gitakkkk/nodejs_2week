@@ -87,13 +87,14 @@ router.post("/auth", async (req, res) => {
         })
         return;
     }
-
+    
     const token = jwt.sign({ userId: user.userId }, "secret-key")
 
     res.send({
         token,
     });
 });
+
 
 router.get("/users/me", authmiddlewares, async (req, res) => {
     const { user } = res.locals;

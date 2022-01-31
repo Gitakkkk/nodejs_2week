@@ -16,12 +16,20 @@
   <script>
     function btn_comment() {
       const comment = $('#inputcomment').val();
+      const id = 
+
+      if (!localStorage.getItem("token")) {
+        alert("로그인이 필요한 기능입니다!")
+        window.location.replace("/login")
+      }
 
       $.ajax({
         type: "POST",
         async: true,
         url: "/api/comment",
         data: {
+          id: 
+          nickname: 
           comment: comment,
         },
         dataType: "JSON",

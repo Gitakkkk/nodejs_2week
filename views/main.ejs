@@ -23,10 +23,22 @@
     </style>
     <script>
 
+        function confirm_login() {
+            if (localStorage.getItem("token")) {
+                    alert("이미 로그인이 되어있습니다");
+                    window.location.replace("/");
+            };
+        }
+
         function logout() {
-            localStorage.removeItem("token")
+            if (!localStorage.getItem("token")) {
+                alert("로그인을 먼저 해주세요")
+                window.location.reload();
+                return;
+            }
+
             alert("로그아웃이 완료되었습니다.")
-            window.location.reload()
+            localStorage.removeItem('token')
         }
 
         function show_contens() {
@@ -49,10 +61,10 @@
                                                 <td>${date}</td>
                                             </tr>`
                         $('#contents-box').append(temp_html)
-                        }                              
                     }
                 }
-            )                                             
+            }
+            )
         }
 
         $(document).ready(function () {
@@ -63,14 +75,14 @@
 
 <body>
     <button onclick="location.href='/write'">글쓰기</button>
-    <button onclick="location.href='/login'">로그인</button>
+    <button onclick="location.href='/login', confirm_login()" id="login">로그인</button>
     <button onclick="logout()">로그아웃</button>
     <table class="table table-striped">
         <thead>
             <tr>
-              <th scope="col">제목</th>
-              <th scope="col">작성자명</th>
-              <th scope="col">작성일</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자명</th>
+                <th scope="col">작성일</th>
             </tr>
         </thead>
         <tbody id="contents-box">
