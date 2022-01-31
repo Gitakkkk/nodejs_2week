@@ -12,11 +12,11 @@ router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
 
 router.post("/posting", authmiddlewares ,async (req, res) => {
-    console.log("router")
+    console.log("router go")
     const { title, contents, date } = req.body;
-    const {user} = req.locals;
-    await myblog.create({ title, name: user.nickname, contents, date});
-    console.log(title, contents, date)
+    const {user} = res.locals;
+    await myblog.create({ title, name: user["nickname"], contents, date});
+    console.log(req.body)
     res.send({});
 })
 

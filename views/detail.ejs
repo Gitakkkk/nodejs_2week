@@ -19,6 +19,7 @@
       const comment = $('#inputcomment').val();
       const queryString = window.location['href'];
       const posting_url = (queryString.toString().split('/'))[4];
+      
 
       if (!localStorage.getItem("token")) {
         alert("로그인이 필요한 기능입니다!")
