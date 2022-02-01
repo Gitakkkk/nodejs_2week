@@ -12,11 +12,9 @@ router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
 
 router.post("/posting", authmiddlewares ,async (req, res) => {
-    console.log("router go")
     const { title, contents, date } = req.body;
     const {user} = res.locals;
     await myblog.create({ title, name: user["nickname"], contents, date});
-    console.log(req.body)
     res.send({});
 })
 
@@ -25,12 +23,37 @@ router.get("/posting", async (req, res) => {
     res.json({ list: blogs })
 })
 
-router.post("/comment", async (req, res) => {
+router.post("/comment", authmiddlewares, async (req, res) => {
     const { comment, posting_url } = req.body;
-
-    await commenting.create({ comment, posting_url });
+    const {user} = res.locals;
+    await commenting.create({ nickname: user['nickname'], comment, posting_url });
     res.send({});
 })
+
+router.get("/comment", async (req, res) => {
+    const comments = await commenting.find()
+    res.json({ list_comment: comments })
+})
+
+router.post("/comment/modify", async (req, res) => {
+    const {comment_modify, id} = req.body;
+
+    if (comment_modify.length === 0) {
+        res.status(400).send({
+            errorMessage: "내용이 없습니다."
+        })
+        return;
+      }
+
+    await commenting.findByIdAndUpdate(id, {"comment":comment_modify})
+    res.send({});
+})
+
+router.post("/comment/delete", async (req, res) => {
+    const {id} = req.body
+    await commenting.deleteOne({id});
+    res.send({});
+  })
 
 try {
     router.post("/users", async (req, res) => {

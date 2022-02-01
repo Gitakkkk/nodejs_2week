@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const CommentSchema = new mongoose.Schema({
+  nickname: {
+    type: String,
+  },
+  
   posting_url: {
     type: String,
   },

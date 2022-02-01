@@ -10,25 +10,33 @@
     integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous" />
   <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
   <button id="btn_edit" onclick="location.href='/edit/<%=list._id%>'">수정 / 삭제</button>
 
   <script>
-      
+
     function btn_comment() {
       const comment = $('#inputcomment').val();
       const queryString = window.location['href'];
       const posting_url = (queryString.toString().split('/'))[4];
-      
+
 
       if (!localStorage.getItem("token")) {
         alert("로그인이 필요한 기능입니다!")
         window.location.replace("/login")
+        return;
       }
 
+      if (comment.length === 0) {
+        alert("댓글 내용을 입력해주세요")
+        window.location.reload();
+        return;
+      }
       $.ajax({
         type: "POST",
         async: true,
+        headers: { authorization: `Bearer ${localStorage.getItem("token")}`, },
         url: "/api/comment",
         data: {
           posting_url: posting_url,
@@ -43,6 +51,55 @@
           alert(error.responseJSON.errorMessage)
         }
       })
+    }
+
+    function modify_comment(id) {
+      const comment_modify = $('#comment_modify' + id).val()
+
+      $.ajax({
+        type: "POST",
+        async: true,
+        url: "/api/comment/modify",
+        data: {
+          comment_modify: comment_modify,
+          id: id
+        },
+        dataType: "JSON",
+        success: function (response) {
+          alert("댓글이 수정되었습니다.")
+          window.location.reload();
+        },
+        error: function (error) {
+          alert(error.responseJSON.errorMessage)
+        }
+      })
+    }
+
+    function delete_comment(id) {
+
+      const result = confirm("정말로 삭제하시겠습니까?")
+      if (!result) {
+        return;
+      }
+
+      $.ajax({
+        type: "POST",
+        async: true,
+        url: "/api/comment/delete",
+        data: {
+          id: id,
+        },
+        dataType: "JSON",
+        success: function (response) {
+          alert("삭제에 성공했습니다!")
+          window.location.reload();
+        }
+      })
+    }
+
+    function hidden_modify(id) {
+      $("#comment_modify" + id).toggleClass("is-hidden")
+      $("#comments-box" + id).toggleClass("is-hidden")
     }
   </script>
 </head>
@@ -83,6 +140,26 @@
     </div>
   </div>
 
+  <% for (let i=0; i<comments.length; i++) { %>
+    <div>
+      <div id="comments-box<%= comments[i]._id %>">
+      <%= comments[i].nickname %>
+        <%= comments[i].comment %>
+      </div>
+          <div>
+            <button onclick="hidden_modify('<%= comments[i]._id %>')">수정</button>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control is-hidden" aria-label="Recipient's username" aria-describedby="basic-addon2"
+                id="comment_modify<%= comments[i]._id %>" value="<%= comments[i].comment %>">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary"
+                  onclick="modify_comment('<%= comments[i]._id %>')">수정완료</button>
+              </div>
+            </div>
+            <button onclick="delete_comment('<%= comments[i]._id %>')">삭제</button>
+          </div>
+    </div>
+    <% } %>
 </body>
 
 </html>

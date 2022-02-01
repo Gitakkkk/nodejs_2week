@@ -5,6 +5,7 @@ const router = express.Router();
 const app = express();
 const port = 3000;
 const myblog = require("./schemas/blogSchema")
+const comment = require("./schemas/comment")
 const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 const User = require("./schemas/user")
@@ -53,10 +54,13 @@ app.get('/edit/:id', async (req, res) => {
 
 
 app.get("/detail/:id", async (req, res) => {
+  const {id} = req.params;
   const post = await myblog.findById(req.params.id);
-  res.render('detail', {list: post});
-})
+  const comments = await comment.find({posting_url:id})
 
+  res.render('detail', {list: post, comments});
+})
+ 
 app.post("/edit/:id/delete", async (req, res) => {
   const {passWord} = req.body
   const posting = await myblog.findById(req.params.id);

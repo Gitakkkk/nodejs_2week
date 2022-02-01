@@ -41,6 +41,16 @@
             localStorage.removeItem('token')
         }
 
+        function btn_write() {
+            if (!localStorage.getItem("token")) {
+                alert("로그인을 먼저 해주세요")
+                window.location.reload();
+                return;
+            }
+
+            window.location.replace('/write')
+        }
+
         function show_contens() {
             $.ajax({
                 type: 'GET',
@@ -74,7 +84,7 @@
 </head>
 
 <body>
-    <button onclick="location.href='/write'">글쓰기</button>
+    <button onclick="btn_write()">글쓰기</button>
     <button onclick="location.href='/login', confirm_login()" id="login">로그인</button>
     <button onclick="logout()">로그아웃</button>
     <table class="table table-striped">
