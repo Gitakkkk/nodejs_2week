@@ -121,6 +121,14 @@ router.post("/auth", async (req, res) => {
     });
 });
 
+router.get("/comment/btn", authmiddlewares, async (req, res) => {
+    const comments = await commenting.find()
+    const { user } = res.locals;
+    res.json({
+        user, list_comment: comments
+    });
+})
+
 
 router.get("/users/me", authmiddlewares, async (req, res) => {
     const { user } = res.locals;

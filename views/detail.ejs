@@ -29,7 +29,7 @@
       }
 
       if (comment.length === 0) {
-        alert("댓글 내용을 입력해주세요")
+        alert("댓글 내용이 비어있습니다")
         window.location.reload();
         return;
       }
@@ -99,8 +99,38 @@
 
     function hidden_modify(id) {
       $("#comment_modify" + id).toggleClass("is-hidden")
+      $("#btn_modify_complete" + id).toggleClass("is-hidden")
       $("#comments-box" + id).toggleClass("is-hidden")
     }
+
+    function show_btn() {
+      $.ajax({
+        type: "GET",
+        async: true,
+        headers: { authorization: `Bearer ${localStorage.getItem("token")}`, },
+        url: "/api/comment/btn",
+        data: {},
+        dataType: "JSON",
+        success: function (response) {
+          for (let i = 0; i < response.list_comment.length; i++) {
+            if (response.user.nickname !== response.list_comment[i].nickname) {
+              $(`#comment_edit${response.list_comment[i]._id}`).toggleClass("is-hidden")
+            }
+          }
+        }
+      })
+    }
+
+    function no_token() {
+      if (!localStorage.getItem("token")) {
+          $('.please').hide()
+        }
+      }
+
+    $(document).ready(function () {
+      show_btn();
+      no_token();
+    })
   </script>
 </head>
 
@@ -143,21 +173,24 @@
   <% for (let i=0; i<comments.length; i++) { %>
     <div>
       <div id="comments-box<%= comments[i]._id %>">
-      <%= comments[i].nickname %>
-        <%= comments[i].comment %>
+        <%= comments[i].nickname %>
+          <%= comments[i].comment %>
       </div>
-          <div>
-            <button onclick="hidden_modify('<%= comments[i]._id %>')">수정</button>
-            <div class="input-group mb-3">
-              <input type="text" class="form-control is-hidden" aria-label="Recipient's username" aria-describedby="basic-addon2"
-                id="comment_modify<%= comments[i]._id %>" value="<%= comments[i].comment %>">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary"
-                  onclick="modify_comment('<%= comments[i]._id %>')">수정완료</button>
-              </div>
+      <div class="please" id="comment_token<%= comments[i]._id %>">
+        <div id="comment_edit<%= comments[i]._id %>">
+          <button onclick="hidden_modify('<%= comments[i]._id %>')">수정</button>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control is-hidden" aria-label="Recipient's username"
+              aria-describedby="basic-addon2" id="comment_modify<%= comments[i]._id %>"
+              value="<%= comments[i].comment %>">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary, is-hidden" onclick="modify_comment('<%= comments[i]._id %>')"
+                id="btn_modify_complete<%= comments[i]._id %>" style="background-color: aquamarine;">수정완료</button>
             </div>
-            <button onclick="delete_comment('<%= comments[i]._id %>')">삭제</button>
           </div>
+          <button onclick="delete_comment('<%= comments[i]._id %>')">삭제</button>
+        </div>
+      </div>
     </div>
     <% } %>
 </body>
