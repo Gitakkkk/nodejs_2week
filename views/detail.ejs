@@ -12,7 +12,9 @@
   <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
-  <button id="btn_edit" onclick="location.href='/edit/<%=list._id%>'">수정 / 삭제</button>
+  <button onclick="location.href='/edit/<%=list._id%>'">수정 / 삭제</button>
+  <button onclick="location.href='/login?<%=list._id%>'" class="btn_login">로그인</button>
+  <button onclick="location.href='/'">홈으로</button>
 
   <script>
 
@@ -121,15 +123,18 @@
       })
     }
 
-    function no_token() {
+    function have_token() {
       if (!localStorage.getItem("token")) {
-          $('.please').hide()
-        }
+        $('.please').hide()
       }
+      else {
+        $('.btn_login').hide()
+      }
+    }
 
     $(document).ready(function () {
       show_btn();
-      no_token();
+      have_token();
     })
   </script>
 </head>

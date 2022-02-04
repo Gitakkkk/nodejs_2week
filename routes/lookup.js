@@ -78,12 +78,12 @@ try {
         });
         if (existUsers) {
             res.status(400).send({
-                errorMessage: "닉네임 또는 패스워드를 확인해주세요"
+                errorMessage: "중복된 닉네임입니다"
             });
             return;
         }
 
-        if  (/^([A-Za-z0-9]{3,})$/.test(nickname) === false || password.length < 3) {
+        if  (/^([A-Za-z0-9가-횡]{3,})$/.test(nickname) === false || password.length < 3) {
             res.status(400).send({
                 errorMessage: "데이터 형식이 옳지 않습니다"
             });
@@ -105,6 +105,7 @@ try {
 router.post("/auth", async (req, res) => {
     const { nickname, password } = req.body;
 
+
     const user = await User.findOne({ nickname });
 
     if (!user || password !== user.password) {
@@ -116,9 +117,7 @@ router.post("/auth", async (req, res) => {
 
     const token = jwt.sign({ userId: user.userId }, "secret-key")
 
-    res.send({
-        token,
-    });
+        res.send({token})
 });
 
 router.get("/comment/btn", authmiddlewares, async (req, res) => {

@@ -16,6 +16,8 @@
         function sign_in() {
             let nickname = $("#InputNickname").val();
             let password = $("#InputPassword").val();
+            // const queryString = window.location['href'];
+            // const posting_url = (queryString.toString().split('?'));
 
             $.ajax({
                 type: "POST",
@@ -24,13 +26,13 @@
                     nickname: nickname,
                     password: password,
                 },
-                success: function(response) {
+                success: function (response) {
                     localStorage.setItem("token", response.token);
                     alert("로그인이 완료되었습니다.")
-                    location.href="/"
-                    
+                    location.href = "/"
+
                 },
-                error: function(error) {
+                error: function (error) {
                     alert(error.responseJSON.errorMessage);
                 },
             });
@@ -41,16 +43,18 @@
 <body>
     <form>
         <div class="form-group">
-          <label for="exampleInputEmail1">ID</label>
-          <input type="text" class="form-control" id="InputNickname" aria-describedby="emailHelp" placeholder="Enter nickname">
+            <label for="exampleInputEmail1">ID</label>
+            <input type="text" class="form-control" id="InputNickname" aria-describedby="emailHelp"
+                placeholder="Enter nickname">
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <input type="password" class="form-control" id="InputPassword" placeholder="Password">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="InputPassword" placeholder="Password">
         </div>
         <p><button type="submit" class="btn btn-primary" onclick="sign_in()">로그인</button>
-        <button type="submit" class="btn btn-primary" onclick="location.href='/register'">회원가입</button></p>
-      </form>
+            <button type="submit" class="btn btn-primary" onclick="location.href='/register'">회원가입</button>
+        </p>
+    </form>
 </body>
 
 </html>
