@@ -55,34 +55,34 @@
         })
     }
 
-    try{
+    try {
         function Modify() {
-        const date = new Date().toISOString();
-        $.ajax({
-            type: "POST",
-            async: true,
-            url: "/edit/<%=list._id%>/modify",
-            data: {
-                title: $("#title").val(),
-                name: $("#name").val(),
-                passWord: $("#passWord").val(),
-                contents: $("#contents").val(),
-                date: date,
-            },
-            dataType: "JSON",
-            success: function (data) {
-                if (data["message"] === "비밀번호가 다릅니다.") {
-                    alert(data["message"])
-                } else {
-                    alert(data["message"])
-                    window.location.replace('/')
+            const date = new Date().toISOString();
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "/edit/<%=list._id%>/modify",
+                data: {
+                    title: $("#title").val(),
+                    name: $("#name").val(),
+                    passWord: $("#passWord").val(),
+                    contents: $("#contents").val(),
+                    date: date,
+                },
+                dataType: "JSON",
+                success: function (data) {
+                    if (data["message"] === "비밀번호가 다릅니다.") {
+                        alert(data["message"])
+                    } else {
+                        alert(data["message"])
+                        window.location.replace('/')
+                    }
                 }
-            }
-        })
+            })
+        }
+    } catch {
+        alert("모든 칸을 채워주세요!")
     }
-} catch {
-    alert("모든 칸을 채워주세요!")
-}
 </script>
 
 </html>
