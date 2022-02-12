@@ -11,6 +11,7 @@ const commenting = require('../schemas/comment');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
+// 글 작성
 router.post('/posting', authmiddlewares, async (req, res) => {
   const { title, contents, date } = req.body;
   const { user } = res.locals;
@@ -18,11 +19,13 @@ router.post('/posting', authmiddlewares, async (req, res) => {
   res.send({});
 });
 
+// 전체 글 조회
 router.get('/posting', async (req, res) => {
   const blogs = await myblog.find().sort({ date: -1 });
   res.json({ list: blogs });
 });
 
+// 댓글 작성
 router.post('/comment', authmiddlewares, async (req, res) => {
   const { comment, posting_url } = req.body;
   const { user } = res.locals;
@@ -30,11 +33,13 @@ router.post('/comment', authmiddlewares, async (req, res) => {
   res.send({});
 });
 
+// 댓글 조회
 router.get('/comment', async (req, res) => {
   const comments = await commenting.find();
   res.json({ list_comment: comments });
 });
 
+// 댓글 수정
 router.post('/comment/modify', async (req, res) => {
   const { comment_modify, id } = req.body;
 
@@ -49,12 +54,14 @@ router.post('/comment/modify', async (req, res) => {
   res.send({});
 });
 
+// 댓글 삭제
 router.post('/comment/delete', async (req, res) => {
   const { id } = req.body;
   await commenting.deleteOne({ id });
   res.send({});
 });
 
+// 회원가입
 try {
   router.post('/users', async (req, res) => {
     const { nickname, password, confirmpassword } = req.body;
@@ -105,6 +112,7 @@ try {
   return;
 }
 
+// 로그인
 router.post('/auth', async (req, res) => {
   const { nickname, password } = req.body;
 
@@ -122,6 +130,7 @@ router.post('/auth', async (req, res) => {
   res.send({ token });
 });
 
+// 본인이 아닌 경우 댓글 수정/삭제 버튼 숨김
 router.get('/comment/btn', authmiddlewares, async (req, res) => {
   const comments = await commenting.find();
   const { user } = res.locals;
@@ -131,6 +140,7 @@ router.get('/comment/btn', authmiddlewares, async (req, res) => {
   });
 });
 
+// 유저 정보 저장
 router.get('/users/me', authmiddlewares, async (req, res) => {
   const { user } = res.locals;
   res.send({
